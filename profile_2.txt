@@ -1,0 +1,11 @@
+SSC=75.0
+HSC=72.0
+Computer=3
+English=3
+Gaming=2-3 Hours
+Preparation=2-3 Hours
+Attendance=60%-79%
+Job=Yes
+Income=Lower middle (15,000-30,000)
+Extra=Yes
+Hometown=City

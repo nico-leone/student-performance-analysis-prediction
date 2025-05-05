@@ -1,0 +1,11 @@
+SSC=90.0
+HSC=91.0
+Computer=5
+English=5
+Gaming=0-1 Hour
+Preparation=More than 3 Hours
+Attendance=80%-100%
+Job=No
+Income=High (Above 50,000)
+Extra=Yes
+Hometown=City

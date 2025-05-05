@@ -1,0 +1,11 @@
+SSC=60.0
+HSC=58.0
+Computer=2
+English=2
+Gaming=More than 3 Hours
+Preparation=0-1 Hour
+Attendance=Below 40%
+Job=Yes
+Income=Low (Below 15,000)
+Extra=No
+Hometown=Village
