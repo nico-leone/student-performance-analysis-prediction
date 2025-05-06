@@ -15,17 +15,15 @@ for index, row in df.iterrows():
         successVal.append("Success")
 df['Outcome'] = successVal
 
-# Encoding
 df_encoded = df.copy()
 le = LabelEncoder()
 
 for col in ['Gaming', 'Hometown', 'Income']:
     df_encoded[col] = le.fit_transform(df_encoded[col])
 
-# Setup for plotting
 sns.set(style="whitegrid")
 
-# Plot 1: Stacked bar chart - Gaming vs Success
+#Stacked bar chart - Gaming vs Success
 plt.figure(figsize=(8, 6))
 gaming_counts = df.groupby(['Gaming','Outcome']).size().unstack(fill_value=0)
 gaming_counts.plot(kind='bar', stacked=True, colormap='Set2', figsize=(8, 6))
@@ -37,7 +35,7 @@ plt.xticks(rotation=20)
 plt.tight_layout()
 plt.show()
 
-# Plot 2: Stacked bar chart - Hometown vs Success
+#Stacked bar chart - Hometown vs Success
 plt.figure(figsize=(6, 5))
 hometown_counts = df.groupby(['Hometown', 'Outcome']).size().unstack(fill_value=0)
 hometown_counts.plot(kind='bar', stacked=True, colormap='Set2', figsize=(6, 5))

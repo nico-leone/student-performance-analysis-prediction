@@ -7,7 +7,6 @@ from unicodedata import numeric
 
 df = pd.read_csv("ResearchInformation3.csv")
 
-# Make Success Column in dataframe and append it to existing data.
 successVal = []
 for index, row in df.iterrows():
     overall = row["Overall"]
@@ -19,20 +18,17 @@ for index, row in df.iterrows():
         successVal.append("Success")
 df['Outcome'] = successVal
 
-# Define relevant columns for out pairplot.
 numeric_features = ['SSC', 'HSC', 'Computer', 'English', 'Last', 'Overall']
 pairplot_features = numeric_features + ['Outcome']
-
-# Ensure data in our columns is numeric to prevent errors, and drop columns that do not fit.
 df[numeric_features] = df[numeric_features].apply(pd.to_numeric, errors='coerce')
 df_clean = df.dropna(subset=pairplot_features)
 
-# Create the pairplot
+#Pairplot 1
 sns.pairplot(df_clean[pairplot_features], hue='Outcome', palette='Set2', diag_kind='hist')
 plt.suptitle('Pairplot of Student Features by Success Label', y=1.02)
 plt.show()
 
-# Secondary Pair plot for additional columns.
+#Pairplot 2
 numeric_subplot_features = ['Overall', 'Last', 'Gaming', 'Income', 'Job']
 overall_subplot_features = numeric_subplot_features + ['Outcome']
 df_subset = df[overall_subplot_features].copy()

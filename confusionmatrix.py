@@ -23,7 +23,6 @@ df['Outcome'] = successVal
 data = df.copy()
 data = data.drop(columns=['Overall'])
 
-# Encoding
 categorical_cols = [
     'Department', 'Gender', 'Income', 'Hometown', 'Preparation',
     'Gaming', 'Attendance', 'Job', 'Extra', 'Semester'
@@ -36,7 +35,6 @@ for col in categorical_cols:
 le = LabelEncoder()
 data['Outcome'] = le.fit_transform(data['Outcome'])
 
-# Features and target
 X = data.drop(columns=['Outcome'])
 y = data['Outcome']
 
@@ -44,16 +42,14 @@ numeric_cols = ['HSC', 'SSC', 'Computer', 'English', 'Last']
 scaler = StandardScaler()
 X[numeric_cols] = scaler.fit_transform(X[numeric_cols])
 
-# Model training-----
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# set the models we intend to use
 models = {
     'Logistic Regression': LogisticRegression(max_iter=1000),
     'Decision Tree': DecisionTreeClassifier(random_state=42)
 }
 
-# Train or models and evaluate their results.
+#Model training
 results = {}
 for name, model in models.items():
     model.fit(X_train, y_train)
@@ -73,7 +69,7 @@ for name, model in models.items():
 
 class_labels = le.classes_
 
-# Create out plot
+#Confusion Matrix Plot
 for name in results:
     cm = results[name]['Confusion Matrix']
     plt.figure()
@@ -83,7 +79,6 @@ for name in results:
     plt.ylabel('Actual')
     plt.show()
 
-# Show summarize results
 summary = {
     model: {
         'Accuracy': round(results[model]['Accuracy'], 3),

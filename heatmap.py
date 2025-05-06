@@ -9,10 +9,9 @@ df = pd.read_csv(file_path)
 
 numeric_df = df.select_dtypes(include=['float64', 'int64'])
 
-# Compute our matrix
 correlation_matrix = numeric_df.corr()
 
-# Plot the heatmap
+#plot
 plt.figure(figsize=(10, 8))
 sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5)
 plt.title('Correlation Heatmap of Numeric Features')
