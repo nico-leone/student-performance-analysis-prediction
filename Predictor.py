@@ -64,20 +64,20 @@ while True:
 
         print(f"\n🎓 Random Forest Predicted GPA: {predicted_rf_gpa:.2f}")
         if predicted_rf_gpa >= 3.5:
-            print("The student is predicted by the random forest to be successful in their university.")
+            print("This student is likely to perform successfully(random forest)")
         elif 3.25 <= predicted_rf_gpa < 3.5:
-            print("The student is predicted by the random forest to receive middling grades in their university.")
+            print("This student is likely to perform moderately (random forest)")
         else:
-            print("The student is predicted by the random forest to not be successful in their university.")
+            print("The student may face difficulties (random forest)")
         print(f"\n🎓 XGBoost Predicted GPA: {predicted_xgb_gpa:.2f}")
         if predicted_xgb_gpa >= 3.5:
-            print("The student is predicted by XGBoost to be successful in their university.")
+            print("This student is likely to perform successfully(XGBoost)")
         elif 3.25 <= predicted_xgb_gpa < 3.5:
-            print("The student is predicted by XGBoost to receive middling grades in their university.")
+            print("This student is likely to perform moderately (XGBoost)")
         else:
-            print("The student is predicted by XGBoost to not be successful in their university.")
+            print("This student may face difficulties (XGBoost)")
 
-        '''
+        ''' 
         explainer_rf = shap.TreeExplainer(rf_model)
         explainer_xgb = shap.TreeExplainer(xgb_model)
         shap_values_rf = explainer_rf.shap_values(data)
