@@ -2,7 +2,8 @@ import pandas
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import LabelEncoder, StandardScaler
 from xgboost import XGBRegressor
-#import shap
+
+# import shap
 
 df = pandas.read_csv("ResearchInformation3.csv")
 
@@ -23,7 +24,7 @@ for columns in categorical_columnss:
 scaler = StandardScaler()
 df[numeric_columnss] = scaler.fit_transform(df[numeric_columnss])
 
-#Model Training
+# Model Training
 X = df[features]
 y = df['Overall']
 rf_model = RandomForestRegressor(random_state=42)
@@ -62,14 +63,26 @@ while True:
         predicted_xgb_gpa = xgb_model.predict(data)[0]
 
         print(f"\n🎓 Random Forest Predicted GPA: {predicted_rf_gpa:.2f}")
-        print(f"🎓 XGBoost Predicted GPA: {predicted_xgb_gpa:.2f}")
+        if predicted_rf_gpa >= 3.5:
+            print("The student is predicted by the random forest to be successful in their university.")
+        elif 3.25 <= predicted_rf_gpa < 3.5:
+            print("The student is predicted by the random forest to receive middling grades in their university.")
+        else:
+            print("The student is predicted by the random forest to not be successful in their university.")
+        print(f"\n🎓 XGBoost Predicted GPA: {predicted_xgb_gpa:.2f}")
+        if predicted_xgb_gpa >= 3.5:
+            print("The student is predicted by XGBoost to be successful in their university.")
+        elif 3.25 <= predicted_xgb_gpa < 3.5:
+            print("The student is predicted by XGBoost to receive middling grades in their university.")
+        else:
+            print("The student is predicted by XGBoost to not be successful in their university.")
 
         '''
         explainer_rf = shap.TreeExplainer(rf_model)
         explainer_xgb = shap.TreeExplainer(xgb_model)
         shap_values_rf = explainer_rf.shap_values(data)
         shap_values_xgb = explainer_xgb.shap_values(data)
-        
+
         print("\n🔍 Feature Contributions (Random Forest):")
         for feature, value in zip(data.columns, shap_values_rf[0]):
             print(f"{feature}: {value:+.3f}")
@@ -86,12 +99,4 @@ while True:
     except Exception as e:
         print(f"Unexpected error: {e}")
 
-
-
-#print(df.groupby('Preparation')['Overall'].agg(['mean', 'count']))
-
-
-
-
-
-
+# print(df.groupby('Preparation')['Overall'].agg(['mean', 'count']))

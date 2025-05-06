@@ -1,21 +1,26 @@
 from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import LabelEncoder, StandardScaler, label_binarize
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score, roc_auc_score
-
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-file_path = "ResearchInformation3.csv"
-df = pd.read_csv(file_path)
+df = pd.read_csv("ResearchInformation3.csv")
 
-df.info(), df.head()
+successVal = []
+for index, row in df.iterrows():
+    overall = row["Overall"]
+    if overall < 3.25:
+        successVal.append("Not Successful")
+    elif 3.25 <= overall < 3.50:
+        successVal.append("Middling")
+    else:
+        successVal.append("Success")
+df['Outcome'] = successVal
+
 data = df.copy()
-
-# Create our successful column.
-data['Successful'] = (data['Overall'] >= 3.5).astype(int)
 data = data.drop(columns=['Overall'])
 
 # Encoding
@@ -28,9 +33,12 @@ le = LabelEncoder()
 for col in categorical_cols:
     data[col] = le.fit_transform(data[col])
 
+le = LabelEncoder()
+data['Outcome'] = le.fit_transform(data['Outcome'])
+
 # Features and target
-X = data.drop(columns=['Successful'])
-y = data['Successful']
+X = data.drop(columns=['Outcome'])
+y = data['Outcome']
 
 numeric_cols = ['HSC', 'SSC', 'Computer', 'English', 'Last']
 scaler = StandardScaler()
@@ -50,21 +58,26 @@ results = {}
 for name, model in models.items():
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
-    y_prob = model.predict_proba(X_test)[:, 1] if hasattr(model, "predict_proba") else None
-
+    if hasattr(model, "predict_proba"):
+        y_prob = model.predict_proba(X_test)
+        y_test_binarized = label_binarize(y_test, classes=list(range(y_prob.shape[1])))
+        roc_auc = roc_auc_score(y_test_binarized, y_prob, multi_class='ovr')
+    else:
+        roc_auc = "N/A"
     results[name] = {
         'Accuracy': accuracy_score(y_test, y_pred),
         'Classification Report': classification_report(y_test, y_pred, output_dict=True),
         'Confusion Matrix': confusion_matrix(y_test, y_pred),
-        'ROC AUC': roc_auc_score(y_test, y_prob) if y_prob is not None else "N/A"
+        'ROC AUC': roc_auc
     }
 
+class_labels = le.classes_
 
 # Create out plot
 for name in results:
     cm = results[name]['Confusion Matrix']
     plt.figure()
-    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
+    sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=class_labels, yticklabels=class_labels)
     plt.title(f'{name} - Confusion Matrix')
     plt.xlabel('Predicted')
     plt.ylabel('Actual')
@@ -83,4 +96,3 @@ summary_df = pd.DataFrame(summary).T
 
 print("Model Performance Summary:\n")
 print(summary_df.to_string())
-

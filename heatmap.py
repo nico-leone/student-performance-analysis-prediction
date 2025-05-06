@@ -6,6 +6,7 @@ from sklearn.preprocessing import LabelEncoder
 file_path = "ResearchInformation3.csv"
 df = pd.read_csv(file_path)
 
+
 numeric_df = df.select_dtypes(include=['float64', 'int64'])
 
 # Compute our matrix
